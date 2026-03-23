@@ -496,13 +496,13 @@ function registerCli(
             await ensureInitialized();
             const uid = opts.user || cfg.collectionName;
 
-            // Get all memories to count
-            const allMemories = await plugin.search("*", uid, 10000);
-            const count = allMemories.results?.length || 0;
+            // Get stats from plugin
+            const stats = await plugin.stats();
 
             console.log(`Index type: ${cfg.indexType}`);
             console.log(`Collection: ${uid}${opts.user ? ` (user: ${opts.user})` : ""}`);
-            console.log(`Total memories: ${count}`);
+            console.log(`Total memories: ${stats.numVectors || 0}`);
+            console.log(`Memory usage: ${stats.memoryUsage?.toFixed?.(2) || 0} MB`);
             console.log(`Storage path: ${cfg.storagePath}`);
             console.log(
               `Auto-recall: ${cfg.autoRecall}, Auto-capture: ${cfg.autoCapture}`,

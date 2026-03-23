@@ -27,6 +27,12 @@ class PluginServer:
         
     def _init_memory(self):
         """Initialize Memory instance with config."""
+        import os
+        # Expand ~ to absolute path
+        storage_path = self.config.get("storagePath", "./sec-mem-data")
+        if storage_path.startswith("~"):
+            storage_path = os.path.expanduser(storage_path)
+        
         memory_config = MemoryConfig(
             vector_store={
                 "provider": "faiss_advanced",
@@ -35,7 +41,7 @@ class PluginServer:
                     "index_type": self.config.get("indexType", "hnsw"),
                     "embedding_model_dims": self.config.get("embeddingDims", 512),
                     "distance_strategy": self.config.get("distanceStrategy", "cosine"),
-                    "path": self.config.get("storagePath", "./sec-mem-data"),
+                    "path": storage_path,
                     # HNSW params
                     "hnsw_m": self.config.get("hnswM", 16),
                     "hnsw_ef_construction": self.config.get("hnswEfConstruction", 64),
