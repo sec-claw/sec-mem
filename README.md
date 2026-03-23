@@ -14,15 +14,21 @@
 
 ## 📦 安装
 
-### 方式 1: 从源码安装
+### 方式 1: OpenClaw 插件（推荐）
+
+sec-mem 是 OpenClaw 的官方记忆插件，提供高性能本地记忆存储：
 
 ```bash
-git clone https://github.com/sec-claw/sec-mem.git
-cd sec-mem
-pip install -e .
+# 安装插件
+openclaw plugins install @kevinzh1117/sec-mem@latest
+
+# 重启 OpenClaw Gateway
+openclaw gateway restart
 ```
 
-### 方式 2: 安装依赖
+安装后，sec-mem 会自动接管 OpenClaw 的记忆功能。
+
+### 方式 2: Python 包（独立使用）
 
 ```bash
 pip install faiss-cpu numpy pydantic
@@ -33,7 +39,95 @@ pip install faiss-cpu numpy pydantic
 pip install faiss-gpu
 ```
 
-## 🚀 快速开始
+### 方式 3: 从源码安装
+
+```bash
+git clone https://github.com/sec-claw/sec-mem.git
+cd sec-mem
+pip install -e .
+```
+
+## 🔌 OpenClaw 集成
+
+### 1. 安装插件
+
+```bash
+openclaw plugins install @kevinzh1117/sec-mem@latest
+```
+
+### 2. 配置 OpenClaw
+
+编辑 `~/.openclaw/openclaw.json`：
+
+```json
+{
+  "plugins": {
+    "installs": {
+      "sec-mem": {
+        "source": "npm",
+        "spec": "@kevinzh1117/sec-mem@latest"
+      }
+    },
+    "slots": {
+      "memory": "sec-mem"
+    },
+    "entries": {
+      "sec-mem": {
+        "enabled": true,
+        "config": {
+          "collectionName": "my-memories",
+          "indexType": "ivf_pq",
+          "ollamaEmbedModel": "nomic-embed-text",
+          "ollamaLlmModel": "qwen3:4b-instruct-2507-q4_K_M",
+          "autoRecall": true,
+          "autoCapture": true
+        }
+      }
+    }
+  }
+}
+```
+
+### 3. 使用 CLI
+
+```bash
+# 查看记忆统计
+openclaw sec-mem stats
+
+# 搜索记忆
+openclaw sec-mem search "user preferences"
+```
+
+### 4. 在 Agent 中使用
+
+安装后，OpenClaw Agent 会自动获得以下工具：
+- `memory_search` - 搜索记忆
+- `memory_store` - 存储记忆
+- `memory_get` - 获取特定记忆
+- `memory_delete` - 删除记忆
+
+并且自动启用：
+- **Auto-Recall**: 每次对话前自动注入相关记忆
+- **Auto-Capture**: 对话结束后自动提取关键信息
+
+---
+
+## 🚀 快速开始（Python 独立使用）
+
+### 0. 准备 Ollama 模型
+
+在开始之前，请确保已安装并运行 Ollama，且已下载所需模型：
+
+```bash
+# 嵌入模型（必需）- 用于将文本转换为向量
+ollama pull nomic-embed-text
+
+# LLM 模型（推荐）- 用于智能提取和总结记忆  
+ollama pull qwen3:4b-instruct-2507-q4_K_M
+
+# 启动 Ollama 服务
+ollama serve
+```
 
 ### 1. 基础使用
 
@@ -56,14 +150,14 @@ config = MemoryConfig(
     embedder={
         "provider": "ollama",
         "config": {
-            "model": "nomic-embed-text",
+            "model": "nomic-embed-text",  # 必需：嵌入模型
             "ollama_base_url": "http://localhost:11434"
         }
     },
     llm={
         "provider": "ollama",
         "config": {
-            "model": "qwen3:4b-instruct-2507-q4_K_M",
+            "model": "qwen3:4b-instruct-2507-q4_K_M",  # 推荐：LLM 模型
             "ollama_base_url": "http://localhost:11434"
         }
     }
@@ -71,7 +165,15 @@ config = MemoryConfig(
 
 # 初始化
 memory = Memory(config)
+```
 
+**模型说明：**
+- **nomic-embed-text** (必需): 用于将文本转换为向量，实现相似度搜索
+- **qwen3:4b** (推荐): 用于智能提取对话中的关键信息并总结成记忆
+
+如果不配置 LLM 模型，系统仍可使用，但记忆提取功能会降级为简单关键词匹配。
+
+```python
 # 添加记忆
 result = memory.add(
     "我喜欢用 Python 写代码",

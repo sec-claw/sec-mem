@@ -30,19 +30,21 @@ class MemoryGraph:
     def __init__(self, config):
         self.config = config
         self.graph = Neo4jGraph(
-            url=self.config.graph_store.config.url,
-            username=self.config.graph_store.config.username,
-            password=self.config.graph_store.config.password,
-            database=self.config.graph_store.config.database,
+            url=self.config.graph_store.config.get("url") if isinstance(self.config.graph_store.config, dict) else self.config.graph_store.config.url,
+            username=self.config.graph_store.config.get("username") if isinstance(self.config.graph_store.config, dict) else self.config.graph_store.config.username,
+            password=self.config.graph_store.config.get("password") if isinstance(self.config.graph_store.config, dict) else self.config.graph_store.config.password,
+            database=self.config.graph_store.config.get("database") if isinstance(self.config.graph_store.config, dict) else self.config.graph_store.config.database,
             refresh_schema=False,
             driver_config={"notifications_min_severity": "OFF"},
         )
         self.embedding_model = EmbedderFactory.create(
             self.config.embedder.provider, self.config.embedder.config, self.config.vector_store.config
         )
-        self.node_label = ":`__Entity__`" if self.config.graph_store.config.base_label else ""
+        graph_config = self.config.graph_store.config
+        base_label = graph_config.get("base_label") if isinstance(graph_config, dict) else graph_config.base_label
+        self.node_label = ":`__Entity__`" if base_label else ""
 
-        if self.config.graph_store.config.base_label:
+        if base_label:
             # Safely add user_id index
             try:
                 self.graph.query(f"CREATE INDEX entity_single IF NOT EXISTS FOR (n {self.node_label}) ON (n.user_id)")

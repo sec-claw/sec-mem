@@ -257,7 +257,12 @@ class Memory(MemoryBase):
         )
         self.llm = LlmFactory.create(self.config.llm.provider, self.config.llm.config)
         self.db = SQLiteManager(self.config.history_db_path)
-        self.collection_name = self.config.vector_store.config.collection_name
+        # Handle both dict and Pydantic model for config
+        vector_config = self.config.vector_store.config
+        if isinstance(vector_config, dict):
+            self.collection_name = vector_config.get("collection_name", "sec_mem")
+        else:
+            self.collection_name = vector_config.collection_name
         self.api_version = self.config.version
         
         # Initialize reranker if configured

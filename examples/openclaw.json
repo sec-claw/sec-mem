@@ -1,0 +1,38 @@
+{
+  "name": "openclaw-with-sec-mem",
+  "version": "1.0.0",
+  "plugins": {
+    "entries": {
+      "sec-mem": {
+        "enabled": true,
+        "package": "@kevinzh1117/sec-mem",
+        "config": {
+          "collectionName": "my-assistant-memories",
+          "indexType": "hnsw",
+          "embeddingDims": 512,
+          "distanceStrategy": "cosine",
+          "storagePath": "./data/sec-mem",
+          
+          "hnswM": 16,
+          "hnswEfConstruction": 64,
+          "hnswEfSearch": 32,
+          
+          "ollamaUrl": "http://localhost:11434",
+          "ollamaEmbedModel": "nomic-embed-text",
+          "ollamaLlmModel": "qwen3:4b-instruct-2507-q4_K_M",
+          
+          "autoRecall": true,
+          "autoCapture": true,
+          "topK": 5,
+          "searchThreshold": 0.5
+        }
+      }
+    }
+  },
+  "agents": {
+    "default": {
+      "model": "ollama:qwen3:4b-instruct-2507-q4_K_M",
+      "tools": ["memory_search", "memory_store", "memory_get", "memory_delete"]
+    }
+  }
+}

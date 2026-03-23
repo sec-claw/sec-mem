@@ -1,0 +1,64 @@
+{
+  "name": "@kevinzh1117/sec-mem",
+  "version": "1.1.1",
+  "description": "High-performance local memory storage plugin for OpenClaw with FAISS Advanced indexing",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "sec_mem/",
+    "openclaw.plugin.json",
+    "pyproject.toml",
+    "README.md",
+    "LICENSE",
+    "OPENCLAW_INTEGRATION.md"
+  ],
+  "bin": {
+    "sec-mem-benchmark": "dist/benchmark-cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "node dist/test.js",
+    "benchmark": "node dist/benchmark-cli.js"
+  },
+  "keywords": [
+    "openclaw",
+    "memory",
+    "faiss",
+    "ollama",
+    "vector-store",
+    "rag",
+    "ai",
+    "plugin"
+  ],
+  "author": "sec-claw",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sec-claw/sec-mem.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sec-claw/sec-mem/issues"
+  },
+  "homepage": "https://github.com/sec-claw/sec-mem#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.48",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "openclaw": ">=0.1.0"
+  },
+  "openclaw": {
+    "extensions": [
+      "./dist/openclaw.js"
+    ]
+  }
+}

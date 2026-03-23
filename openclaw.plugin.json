@@ -1,0 +1,134 @@
+{
+  "id": "sec-mem",
+  "kind": "memory",
+  "uiHints": {
+    "collectionName": {
+      "label": "Collection Name",
+      "placeholder": "sec-mem",
+      "help": "Name for this memory collection (user namespace)"
+    },
+    "indexType": {
+      "label": "FAISS Index Type",
+      "help": "Index type: flat (exact), hnsw (fast), ivf (balanced), ivf_pq (compressed), pq (quantized)"
+    },
+    "embeddingDims": {
+      "label": "Embedding Dimensions",
+      "placeholder": "512",
+      "help": "Must match your Ollama embedding model (nomic-embed-text=512, mxbai=768)"
+    },
+    "storagePath": {
+      "label": "Storage Path",
+      "placeholder": "./sec-mem-data",
+      "help": "Directory to store FAISS index and metadata"
+    },
+    "hnswM": {
+      "label": "HNSW M",
+      "advanced": true,
+      "help": "Number of connections per node (default: 16)"
+    },
+    "hnswEfSearch": {
+      "label": "HNSW EF Search",
+      "advanced": true,
+      "help": "Search time accuracy vs speed tradeoff (default: 32)"
+    },
+    "ollamaUrl": {
+      "label": "Ollama URL",
+      "placeholder": "http://localhost:11434",
+      "help": "Ollama server URL"
+    },
+    "ollamaEmbedModel": {
+      "label": "Ollama Embedding Model",
+      "placeholder": "nomic-embed-text",
+      "help": "Model for generating embeddings (required)"
+    },
+    "ollamaLlmModel": {
+      "label": "Ollama LLM Model",
+      "placeholder": "qwen3:4b-instruct-2507-q4_K_M",
+      "help": "Model for memory extraction (optional but recommended)"
+    },
+    "autoCapture": {
+      "label": "Auto-Capture",
+      "help": "Automatically store conversation context after each agent turn"
+    },
+    "autoRecall": {
+      "label": "Auto-Recall",
+      "help": "Automatically inject relevant memories before each agent turn"
+    },
+    "topK": {
+      "label": "Top K Results",
+      "placeholder": "5",
+      "help": "Maximum number of memories to retrieve"
+    },
+    "searchThreshold": {
+      "label": "Search Threshold",
+      "placeholder": "0.5",
+      "help": "Minimum similarity score for search results (0-1)"
+    }
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "collectionName": {
+        "type": "string"
+      },
+      "indexType": {
+        "type": "string",
+        "enum": ["flat", "hnsw", "ivf", "ivf_pq", "pq"]
+      },
+      "embeddingDims": {
+        "type": "number"
+      },
+      "distanceStrategy": {
+        "type": "string",
+        "enum": ["euclidean", "inner_product", "cosine"]
+      },
+      "storagePath": {
+        "type": "string"
+      },
+      "hnswM": {
+        "type": "number"
+      },
+      "hnswEfConstruction": {
+        "type": "number"
+      },
+      "hnswEfSearch": {
+        "type": "number"
+      },
+      "nlist": {
+        "type": "number"
+      },
+      "nprobe": {
+        "type": "number"
+      },
+      "m": {
+        "type": "number"
+      },
+      "nbits": {
+        "type": "number"
+      },
+      "ollamaUrl": {
+        "type": "string"
+      },
+      "ollamaEmbedModel": {
+        "type": "string"
+      },
+      "ollamaLlmModel": {
+        "type": "string"
+      },
+      "autoRecall": {
+        "type": "boolean"
+      },
+      "autoCapture": {
+        "type": "boolean"
+      },
+      "topK": {
+        "type": "number"
+      },
+      "searchThreshold": {
+        "type": "number"
+      }
+    },
+    "required": []
+  }
+}
