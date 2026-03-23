@@ -14,30 +14,30 @@ import numpy as np
 # 确保能正确导入
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# 直接导入，绕过 mem0 包结构
+# 直接导入，绕过 sec_mem 包结构
 import importlib.util
 
 # 加载 faiss_advanced 模块
 spec = importlib.util.spec_from_file_location(
     "faiss_advanced", 
-    os.path.join(os.path.dirname(__file__), "mem0/vector_stores/faiss_advanced.py")
+    os.path.join(os.path.dirname(__file__), "sec_mem/vector_stores/faiss_advanced.py")
 )
 
 # 设置必要的依赖模块
 import types
 
-# mem0 包结构
-mem0 = types.ModuleType('mem0')
-mem0.__version__ = "0.0.0"
-sys.modules['mem0'] = mem0
+# sec_mem 包结构
+sec_mem = types.ModuleType('sec_mem')
+sec_mem.__version__ = "0.0.0"
+sys.modules['sec_mem'] = sec_mem
 
 # vector_stores 子包
-vs = types.ModuleType('mem0.vector_stores')
+vs = types.ModuleType('sec_mem.vector_stores')
 vs.__path__ = []
-sys.modules['mem0.vector_stores'] = vs
+sys.modules['sec_mem.vector_stores'] = vs
 
 # base 模块
-base_mod = types.ModuleType('mem0.vector_stores.base')
+base_mod = types.ModuleType('sec_mem.vector_stores.base')
 from abc import ABC, abstractmethod
 
 class VectorStoreBase(ABC):
@@ -65,7 +65,7 @@ class VectorStoreBase(ABC):
     def reset(self): pass
 
 base_mod.VectorStoreBase = VectorStoreBase
-sys.modules['mem0.vector_stores.base'] = base_mod
+sys.modules['sec_mem.vector_stores.base'] = base_mod
 
 # 现在加载 faiss_advanced
 faiss_advanced = importlib.util.module_from_spec(spec)

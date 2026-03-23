@@ -31,7 +31,7 @@ ollama pull all-minilm          # 更快，384维
 ### 3. 安装 Python 依赖
 
 ```bash
-cd /Users/kevin/Desktop/mem0
+cd /Users/kevin/Desktop/sec_mem
 
 # 创建虚拟环境
 python3 -m venv venv
@@ -40,7 +40,7 @@ source venv/bin/activate
 # 安装依赖
 pip install faiss-cpu ollama numpy psutil
 
-# 可选：安装 mem0ai 完整包
+# 可选：安装 sec_memai 完整包
 pip install -e .
 ```
 
@@ -128,7 +128,7 @@ python3 benchmark_faiss_advanced.py
 {
   "plugins": {
     "entries": {
-      "openclaw-mem0": {
+      "openclaw-sec_mem": {
         "enabled": true,
         "config": {
           "mode": "open-source",
@@ -144,11 +144,11 @@ python3 benchmark_faiss_advanced.py
             "vectorStore": {
               "provider": "faiss_advanced",
               "config": {
-                "collection_name": "mem0",
+                "collection_name": "sec_mem",
                 "index_type": "hnsw",  // 推荐
                 "embedding_model_dims": 512,
                 "distance_strategy": "cosine",
-                "path": "./mem0_data",
+                "path": "./sec_mem_data",
                 "hnsw_m": 16,
                 "hnsw_ef_search": 32
               }

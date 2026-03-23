@@ -4,7 +4,7 @@ Benchmark script for FAISS Advanced vector store with Ollama.
 Compares different index types: flat, hnsw, ivf, ivf_pq
 
 Requirements:
-    pip install faiss-cpu ollama mem0ai
+    pip install faiss-cpu ollama sec_memai
 
 Ollama models needed:
     - Embedding: nomic-embed-text (default) or others
@@ -190,7 +190,7 @@ def benchmark_index(
     
     try:
         # Import FAISSAdvanced
-        from mem0.vector_stores.faiss_advanced import FAISSAdvanced
+        from sec_mem.vector_stores.faiss_advanced import FAISSAdvanced
         
         # Measure initial memory
         mem_before = get_memory_usage()
