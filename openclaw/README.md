@@ -219,6 +219,48 @@ Everything inside `oss` is optional — defaults use OpenAI embeddings (`text-em
 
 > **SQLite resilience:** If the history DB fails to initialize (e.g. native binding resolution under jiti), the plugin automatically retries with history disabled. Core memory operations (add, search, get, delete) work without the history DB.
 
+#### Advanced FAISS Configuration (Open-Source)
+
+For improved performance with local vector storage, use the `faiss_advanced` provider:
+
+```json5
+"config": {
+  "mode": "open-source",
+  "userId": "your-user-id",
+  "oss": {
+    "vectorStore": {
+      "provider": "faiss_advanced",
+      "config": {
+        "collection_name": "mem0",
+        "index_type": "hnsw",
+        "embedding_model_dims": 1536,
+        "hnsw_m": 16,
+        "hnsw_ef_search": 32
+      }
+    }
+  }
+}
+```
+
+**Available index types:**
+
+| Index Type | Best For | Memory | Speed | Recall |
+|------------|----------|--------|-------|--------|
+| `flat` | < 100K vectors | 100% | Slow | 100% |
+| `hnsw` | < 1M vectors | 150% | Fast | ~95% |
+| `ivf` | > 1M vectors | 110% | Medium | ~90% |
+| `ivf_pq` | Memory-constrained | 10-25% | Medium | ~85% |
+| `pq` | Extreme compression | 5-10% | Medium | ~80% |
+
+**Key parameters:**
+- `index_type`: Index algorithm (see table above)
+- `distance_strategy`: `"euclidean"`, `"inner_product"`, or `"cosine"`
+- `hnsw_m` / `hnsw_ef_search`: HNSW accuracy/speed tradeoff
+- `nlist` / `nprobe`: IVF cluster settings
+- `m` / `nbits`: PQ compression settings (higher `m` = better accuracy)
+
+See [ADVANCED_FAISS_GUIDE.md](./ADVANCED_FAISS_GUIDE.md) for detailed configuration examples and tuning recommendations.
+
 ## License
 
 Apache 2.0

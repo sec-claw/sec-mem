@@ -168,6 +168,7 @@ const ALLOWED_KEYS = [
   "searchThreshold",
   "topK",
   "oss",
+  "reranker",
 ];
 
 function assertAllowedKeys(
